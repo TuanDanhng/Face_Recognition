@@ -1,7 +1,8 @@
 import cv2
-import face_recognition
+import face_recognition # yeu cau du lieu anh dau vao bieu dien duoi dang khong gian mau RGB
 import os # thu vien load anh
 import numpy # thu vien tinh toan ma tran
+import pyttsx3
 
 path = "Img_check"
 images = []
@@ -26,6 +27,7 @@ print("Loading :.............. 100%")
 
 cap = cv2.VideoCapture(0)
 
+count = 0
 while True:
     ret,frame = cap.read()
     frame_new = cv2.resize(frame,(0,0),None,fx=1,fy=1)
@@ -45,11 +47,21 @@ while True:
         
         y1, x2, y2, x1 = FaceLocation
         cv2.rectangle(frame,(x1,y1), (x2,y2),(255,215,0),2)
-        cv2.putText(frame,name,(x2,y2),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,215,0),2)
-           
+        cv2.putText(frame,name,(x2,y2),cv2.FONT_HERSHEY_SIMPLEX,0.5,(255,215,0),2)   
+        
+        if name != "UNKNOW" and count == 0:
+            engine = pyttsx3.init()
+            engine.say(f"hello, {name}")
+            engine.runAndWait()
+        
+             
+    count = 1
+      
     cv2.imshow('FaceID',frame)
     if cv2.waitKey(1) == ord("q"):
          break
+
+
 
 cap.release()
 cv2.destroyAllWindows()
